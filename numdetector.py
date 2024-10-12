@@ -2,15 +2,14 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 from keras import layers, models
 import matplotlib.pyplot as plt
+import json
 
 
-(train, test), info = tfds.load(
+(train, test) = tfds.load(
     "mnist",
     split=["train", "test"],
     shuffle_files=True,
-    as_supervised=True,
-    with_info=True,
-)
+    as_supervised=True)
 
 
 def normalize_image(image, label):
@@ -38,3 +37,6 @@ model.compile(
     metrics=["accuracy"],
 )
 history = model.fit(train, validation_data=test, epochs=5)
+history_dict = history.history
+with open('training_history.json', 'w') as f:
+    json.dump(history_dict, f)
